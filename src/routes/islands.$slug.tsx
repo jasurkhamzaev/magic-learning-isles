@@ -112,7 +112,7 @@ function IslandDetail() {
         <section className="mt-16">
           <h2 className="text-2xl font-extrabold text-white">Fanlar</h2>
           <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {island.subjects.map((s, i) => (
+            {island.subjects.map((s: { icon: string; name: string }, i: number) => (
               <motion.div
                 key={s.name}
                 initial={{ opacity: 0, y: 20 }}
