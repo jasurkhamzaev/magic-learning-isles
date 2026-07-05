@@ -9,9 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OrollarRouteImport } from './routes/orollar'
+import { Route as FanlarRouteImport } from './routes/fanlar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IslandsSlugRouteImport } from './routes/islands.$slug'
 
+const OrollarRoute = OrollarRouteImport.update({
+  id: '/orollar',
+  path: '/orollar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FanlarRoute = FanlarRouteImport.update({
+  id: '/fanlar',
+  path: '/fanlar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -25,32 +37,54 @@ const IslandsSlugRoute = IslandsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/fanlar': typeof FanlarRoute
+  '/orollar': typeof OrollarRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/fanlar': typeof FanlarRoute
+  '/orollar': typeof OrollarRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/fanlar': typeof FanlarRoute
+  '/orollar': typeof OrollarRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/islands/$slug'
+  fullPaths: '/' | '/fanlar' | '/orollar' | '/islands/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/islands/$slug'
-  id: '__root__' | '/' | '/islands/$slug'
+  to: '/' | '/fanlar' | '/orollar' | '/islands/$slug'
+  id: '__root__' | '/' | '/fanlar' | '/orollar' | '/islands/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FanlarRoute: typeof FanlarRoute
+  OrollarRoute: typeof OrollarRoute
   IslandsSlugRoute: typeof IslandsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/orollar': {
+      id: '/orollar'
+      path: '/orollar'
+      fullPath: '/orollar'
+      preLoaderRoute: typeof OrollarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fanlar': {
+      id: '/fanlar'
+      path: '/fanlar'
+      fullPath: '/fanlar'
+      preLoaderRoute: typeof FanlarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -70,6 +104,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FanlarRoute: FanlarRoute,
+  OrollarRoute: OrollarRoute,
   IslandsSlugRoute: IslandsSlugRoute,
 }
 export const routeTree = rootRouteImport
