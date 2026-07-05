@@ -3,12 +3,12 @@ import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Globe, Moon, Sun, Menu, X, LogIn } from "lucide-react";
 
-const links = [
-  { href: "#orollar", label: "Orollar" },
-  { href: "#fanlar", label: "Fanlar" },
-  { href: "#reyting", label: "Reyting" },
-  { href: "#mukofotlar", label: "Mukofotlar" },
-  { href: "#blog", label: "Blog" },
+const links: { to: "/orollar" | "/fanlar" | "/reyting" | "/mukofotlar" | "/blog"; label: string }[] = [
+  { to: "/orollar", label: "Orollar" },
+  { to: "/fanlar", label: "Fanlar" },
+  { to: "/reyting", label: "Reyting" },
+  { to: "/mukofotlar", label: "Mukofotlar" },
+  { to: "/blog", label: "Blog" },
 ];
 
 export function Navbar() {
