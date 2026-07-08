@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { Globe, Moon, Sun, Menu, X, LogIn } from "lucide-react";
+import { Globe, Moon, Sun, Menu, X, User } from "lucide-react";
 
 const links = [
-  { href: "#orollar", label: "Orollar" },
-  { href: "#fanlar", label: "Fanlar" },
-  { href: "#reyting", label: "Reyting" },
-  { href: "#mukofotlar", label: "Mukofotlar" },
-  { href: "#blog", label: "Blog" },
-];
+  { to: "/islands", label: "Orollar" },
+  { to: "/subjects", label: "Fanlar" },
+  { to: "/leaderboard", label: "Reyting" },
+  { to: "/rewards", label: "Mukofotlar" },
+  { to: "/blog", label: "Blog" },
+  { to: "/ai-teacher", label: "AI Ustoz" },
+  { to: "/map", label: "Xarita" },
+] as const;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
