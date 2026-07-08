@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Hashimjon Akademiyasi — Sehrli Bilim Orollari" },
       {
         property: "og:description",
-        content: "Sehrli bilim orollari — ta'lim sarguzashti bolalar uchun.",
+        content: "Bolalar uchun sehrli ta'lim platformasi. Quvonch, Kashfiyot va Kelajak orollari bo'ylab sayohat qiling, fanlarni o'rganing va mukofotlar yuting.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
