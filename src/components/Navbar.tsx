@@ -79,12 +79,12 @@ export function Navbar() {
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <a
-            href="#login"
+          <Link
+            to="/profile"
             className="inline-flex items-center gap-1.5 rounded-full bg-gradient-sunset px-4 py-2 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition-transform hover:scale-105"
           >
-            <LogIn className="h-4 w-4" /> Kirish
-          </a>
+            <User className="h-4 w-4" /> Profil
+          </Link>
           <button
             onClick={() => setOpen(!open)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/90 lg:hidden"
