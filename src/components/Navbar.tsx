@@ -103,14 +103,14 @@ export function Navbar() {
         >
           <div className="flex flex-col gap-1">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
+              <Link
+                key={l.to}
+                to={l.to}
                 onClick={() => setOpen(false)}
                 className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
           </div>
         </motion.div>
