@@ -3,12 +3,12 @@ import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Globe, Moon, Sun, Menu, X, LogIn } from "lucide-react";
 
-const links: { to: "/orollar" | "/fanlar" | "/reyting" | "/mukofotlar" | "/blog"; label: string }[] = [
-  { to: "/orollar", label: "Orollar" },
-  { to: "/fanlar", label: "Fanlar" },
-  { to: "/reyting", label: "Reyting" },
-  { to: "/mukofotlar", label: "Mukofotlar" },
-  { to: "/blog", label: "Blog" },
+const links = [
+  { href: "#orollar", label: "Orollar" },
+  { href: "#fanlar", label: "Fanlar" },
+  { href: "#reyting", label: "Reyting" },
+  { href: "#mukofotlar", label: "Mukofotlar" },
+  { href: "#blog", label: "Blog" },
 ];
 
 export function Navbar() {
@@ -51,14 +51,13 @@ export function Navbar() {
 
         <div className="hidden items-center gap-1 lg:flex">
           {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              activeProps={{ className: "bg-white/10 text-white" }}
+            <a
+              key={l.href}
+              href={l.href}
               className="rounded-full px-3.5 py-1.5 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
             >
               {l.label}
-            </Link>
+            </a>
           ))}
         </div>
 
@@ -101,14 +100,14 @@ export function Navbar() {
         >
           <div className="flex flex-col gap-1">
             {links.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
+              <a
+                key={l.href}
+                href={l.href}
                 onClick={() => setOpen(false)}
                 className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10"
               >
                 {l.label}
-              </Link>
+              </a>
             ))}
           </div>
         </motion.div>

@@ -9,39 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ReytingRouteImport } from './routes/reyting'
-import { Route as OrollarRouteImport } from './routes/orollar'
-import { Route as MukofotlarRouteImport } from './routes/mukofotlar'
-import { Route as FanlarRouteImport } from './routes/fanlar'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IslandsSlugRouteImport } from './routes/islands.$slug'
 
-const ReytingRoute = ReytingRouteImport.update({
-  id: '/reyting',
-  path: '/reyting',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrollarRoute = OrollarRouteImport.update({
-  id: '/orollar',
-  path: '/orollar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MukofotlarRoute = MukofotlarRouteImport.update({
-  id: '/mukofotlar',
-  path: '/mukofotlar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FanlarRoute = FanlarRouteImport.update({
-  id: '/fanlar',
-  path: '/fanlar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,109 +25,32 @@ const IslandsSlugRoute = IslandsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
-  '/fanlar': typeof FanlarRoute
-  '/mukofotlar': typeof MukofotlarRoute
-  '/orollar': typeof OrollarRoute
-  '/reyting': typeof ReytingRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
-  '/fanlar': typeof FanlarRoute
-  '/mukofotlar': typeof MukofotlarRoute
-  '/orollar': typeof OrollarRoute
-  '/reyting': typeof ReytingRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
-  '/fanlar': typeof FanlarRoute
-  '/mukofotlar': typeof MukofotlarRoute
-  '/orollar': typeof OrollarRoute
-  '/reyting': typeof ReytingRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/blog'
-    | '/fanlar'
-    | '/mukofotlar'
-    | '/orollar'
-    | '/reyting'
-    | '/islands/$slug'
+  fullPaths: '/' | '/islands/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/blog'
-    | '/fanlar'
-    | '/mukofotlar'
-    | '/orollar'
-    | '/reyting'
-    | '/islands/$slug'
-  id:
-    | '__root__'
-    | '/'
-    | '/blog'
-    | '/fanlar'
-    | '/mukofotlar'
-    | '/orollar'
-    | '/reyting'
-    | '/islands/$slug'
+  to: '/' | '/islands/$slug'
+  id: '__root__' | '/' | '/islands/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BlogRoute: typeof BlogRoute
-  FanlarRoute: typeof FanlarRoute
-  MukofotlarRoute: typeof MukofotlarRoute
-  OrollarRoute: typeof OrollarRoute
-  ReytingRoute: typeof ReytingRoute
   IslandsSlugRoute: typeof IslandsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/reyting': {
-      id: '/reyting'
-      path: '/reyting'
-      fullPath: '/reyting'
-      preLoaderRoute: typeof ReytingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/orollar': {
-      id: '/orollar'
-      path: '/orollar'
-      fullPath: '/orollar'
-      preLoaderRoute: typeof OrollarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mukofotlar': {
-      id: '/mukofotlar'
-      path: '/mukofotlar'
-      fullPath: '/mukofotlar'
-      preLoaderRoute: typeof MukofotlarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/fanlar': {
-      id: '/fanlar'
-      path: '/fanlar'
-      fullPath: '/fanlar'
-      preLoaderRoute: typeof FanlarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -177,11 +70,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BlogRoute: BlogRoute,
-  FanlarRoute: FanlarRoute,
-  MukofotlarRoute: MukofotlarRoute,
-  OrollarRoute: OrollarRoute,
-  ReytingRoute: ReytingRoute,
   IslandsSlugRoute: IslandsSlugRoute,
 }
 export const routeTree = rootRouteImport
