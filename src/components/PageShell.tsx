@@ -5,7 +5,7 @@ import { SiteFooter } from "./SiteFooter";
 import { MagicalBackground } from "./MagicalBackground";
 
 type Props = {
-  eyebrow?: string;
+  eyebrow?: ReactNode;
   title: ReactNode;
   subtitle?: ReactNode;
   children: ReactNode;
