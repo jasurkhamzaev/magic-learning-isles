@@ -9,48 +9,234 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SubjectsRouteImport } from './routes/subjects'
+import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MapRouteImport } from './routes/map'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as IslandsRouteImport } from './routes/islands'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AiTeacherRouteImport } from './routes/ai-teacher'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IslandsSlugRouteImport } from './routes/islands.$slug'
 
+const SubjectsRoute = SubjectsRouteImport.update({
+  id: '/subjects',
+  path: '/subjects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IslandsRoute = IslandsRouteImport.update({
+  id: '/islands',
+  path: '/islands',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiTeacherRoute = AiTeacherRouteImport.update({
+  id: '/ai-teacher',
+  path: '/ai-teacher',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IslandsSlugRoute = IslandsSlugRouteImport.update({
-  id: '/islands/$slug',
-  path: '/islands/$slug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => IslandsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/ai-teacher': typeof AiTeacherRoute
+  '/blog': typeof BlogRoute
+  '/islands': typeof IslandsRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
+  '/map': typeof MapRoute
+  '/profile': typeof ProfileRoute
+  '/rewards': typeof RewardsRoute
+  '/subjects': typeof SubjectsRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/ai-teacher': typeof AiTeacherRoute
+  '/blog': typeof BlogRoute
+  '/islands': typeof IslandsRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
+  '/map': typeof MapRoute
+  '/profile': typeof ProfileRoute
+  '/rewards': typeof RewardsRoute
+  '/subjects': typeof SubjectsRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/ai-teacher': typeof AiTeacherRoute
+  '/blog': typeof BlogRoute
+  '/islands': typeof IslandsRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
+  '/map': typeof MapRoute
+  '/profile': typeof ProfileRoute
+  '/rewards': typeof RewardsRoute
+  '/subjects': typeof SubjectsRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/islands/$slug'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/ai-teacher'
+    | '/blog'
+    | '/islands'
+    | '/leaderboard'
+    | '/map'
+    | '/profile'
+    | '/rewards'
+    | '/subjects'
+    | '/islands/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/islands/$slug'
-  id: '__root__' | '/' | '/islands/$slug'
+  to:
+    | '/'
+    | '/admin'
+    | '/ai-teacher'
+    | '/blog'
+    | '/islands'
+    | '/leaderboard'
+    | '/map'
+    | '/profile'
+    | '/rewards'
+    | '/subjects'
+    | '/islands/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/ai-teacher'
+    | '/blog'
+    | '/islands'
+    | '/leaderboard'
+    | '/map'
+    | '/profile'
+    | '/rewards'
+    | '/subjects'
+    | '/islands/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  IslandsSlugRoute: typeof IslandsSlugRoute
+  AdminRoute: typeof AdminRoute
+  AiTeacherRoute: typeof AiTeacherRoute
+  BlogRoute: typeof BlogRoute
+  IslandsRoute: typeof IslandsRouteWithChildren
+  LeaderboardRoute: typeof LeaderboardRoute
+  MapRoute: typeof MapRoute
+  ProfileRoute: typeof ProfileRoute
+  RewardsRoute: typeof RewardsRoute
+  SubjectsRoute: typeof SubjectsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/subjects': {
+      id: '/subjects'
+      path: '/subjects'
+      fullPath: '/subjects'
+      preLoaderRoute: typeof SubjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/islands': {
+      id: '/islands'
+      path: '/islands'
+      fullPath: '/islands'
+      preLoaderRoute: typeof IslandsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-teacher': {
+      id: '/ai-teacher'
+      path: '/ai-teacher'
+      fullPath: '/ai-teacher'
+      preLoaderRoute: typeof AiTeacherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -60,17 +246,36 @@ declare module '@tanstack/react-router' {
     }
     '/islands/$slug': {
       id: '/islands/$slug'
-      path: '/islands/$slug'
+      path: '/$slug'
       fullPath: '/islands/$slug'
       preLoaderRoute: typeof IslandsSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof IslandsRoute
     }
   }
 }
 
+interface IslandsRouteChildren {
+  IslandsSlugRoute: typeof IslandsSlugRoute
+}
+
+const IslandsRouteChildren: IslandsRouteChildren = {
+  IslandsSlugRoute: IslandsSlugRoute,
+}
+
+const IslandsRouteWithChildren =
+  IslandsRoute._addFileChildren(IslandsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  IslandsSlugRoute: IslandsSlugRoute,
+  AdminRoute: AdminRoute,
+  AiTeacherRoute: AiTeacherRoute,
+  BlogRoute: BlogRoute,
+  IslandsRoute: IslandsRouteWithChildren,
+  LeaderboardRoute: LeaderboardRoute,
+  MapRoute: MapRoute,
+  ProfileRoute: ProfileRoute,
+  RewardsRoute: RewardsRoute,
+  SubjectsRoute: SubjectsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

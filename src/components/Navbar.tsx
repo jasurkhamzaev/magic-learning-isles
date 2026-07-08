@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { Globe, Moon, Sun, Menu, X, LogIn } from "lucide-react";
+import { Globe, Moon, Sun, Menu, X, User } from "lucide-react";
 
 const links = [
-  { href: "#orollar", label: "Orollar" },
-  { href: "#fanlar", label: "Fanlar" },
-  { href: "#reyting", label: "Reyting" },
-  { href: "#mukofotlar", label: "Mukofotlar" },
-  { href: "#blog", label: "Blog" },
-];
+  { to: "/islands", label: "Orollar" },
+  { to: "/subjects", label: "Fanlar" },
+  { to: "/leaderboard", label: "Reyting" },
+  { to: "/rewards", label: "Mukofotlar" },
+  { to: "/blog", label: "Blog" },
+  { to: "/ai-teacher", label: "AI Ustoz" },
+  { to: "/map", label: "Xarita" },
+] as const;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -51,13 +53,14 @@ export function Navbar() {
 
         <div className="hidden items-center gap-1 lg:flex">
           {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
+            <Link
+              key={l.to}
+              to={l.to}
+              activeProps={{ className: "bg-white/15 text-white" }}
               className="rounded-full px-3.5 py-1.5 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -76,12 +79,12 @@ export function Navbar() {
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <a
-            href="#login"
+          <Link
+            to="/profile"
             className="inline-flex items-center gap-1.5 rounded-full bg-gradient-sunset px-4 py-2 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition-transform hover:scale-105"
           >
-            <LogIn className="h-4 w-4" /> Kirish
-          </a>
+            <User className="h-4 w-4" /> Profil
+          </Link>
           <button
             onClick={() => setOpen(!open)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/90 lg:hidden"
@@ -100,14 +103,14 @@ export function Navbar() {
         >
           <div className="flex flex-col gap-1">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
+              <Link
+                key={l.to}
+                to={l.to}
                 onClick={() => setOpen(false)}
                 className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
           </div>
         </motion.div>
