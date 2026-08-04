@@ -4,7 +4,7 @@ import { LayoutDashboard, Users, GraduationCap, BookOpen, ClipboardList, Award, 
 import { MagicalBackground } from "@/components/MagicalBackground";
 import { GlassCard } from "@/components/PageShell";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
       { title: "Admin — Hashimjon Akademiyasi" },
