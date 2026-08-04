@@ -21,6 +21,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IslandsSlugRouteImport } from './routes/islands.$slug'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const SubjectsRoute = SubjectsRouteImport.update({
@@ -82,6 +83,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/subjects'
     | '/admin'
+    | '/dashboard'
     | '/profile'
     | '/islands/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/subjects'
     | '/admin'
+    | '/dashboard'
     | '/profile'
     | '/islands/$slug'
   id:
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/subjects'
     | '/_authenticated/admin'
+    | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/islands/$slug'
   fileRoutesById: FileRoutesById
@@ -277,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -289,11 +308,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
 }
 
