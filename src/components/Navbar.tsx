@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Link } from "@tanstack/react-router";
-import { Globe, Moon, Sun, Menu, X, User } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { Globe, Moon, Sun, Menu, X, User, LogIn, LogOut, ShieldCheck, LayoutDashboard } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { ROLE_EMOJI, ROLE_LABEL } from "@/lib/roles";
 
 const links = [
   { to: "/islands", label: "Orollar" },
@@ -18,6 +22,9 @@ export function Navbar() {
   const [dark, setDark] = useState(true);
   const [lang, setLang] = useState<"UZ" | "EN">("UZ");
   const [open, setOpen] = useState(false);
+  const { user, profile, role, isStaff } = useAuth();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -29,6 +36,14 @@ export function Navbar() {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
+
+  async function signOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    setOpen(false);
+    void navigate({ to: "/auth", replace: true });
+  }
 
   return (
     <motion.header
@@ -79,12 +94,48 @@ export function Navbar() {
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <Link
-            to="/profile"
-            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-sunset px-4 py-2 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition-transform hover:scale-105"
-          >
-            <User className="h-4 w-4" /> Profil
-          </Link>
+
+          {user ? (
+            <>
+              {isStaff && (
+                <Link
+                  to="/admin"
+                  className="hidden items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-bold text-white/90 hover:bg-white/10 md:inline-flex"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" /> Admin
+                </Link>
+              )}
+              <Link
+                to="/dashboard"
+                className="hidden items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-bold text-white/90 hover:bg-white/10 sm:inline-flex"
+              >
+                <LayoutDashboard className="h-3.5 w-3.5" /> Panel
+              </Link>
+              <Link
+                to="/profile"
+                title={`${ROLE_EMOJI[role]} ${ROLE_LABEL[role]}`}
+                className="inline-flex items-center gap-1.5 rounded-full bg-gradient-sunset px-3.5 py-2 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition-transform hover:scale-105"
+              >
+                <span className="text-base leading-none">{profile?.avatar_emoji ?? "🧑‍🚀"}</span>
+                <span className="hidden sm:inline">{profile?.full_name?.split(" ")[0] ?? "Profil"}</span>
+              </Link>
+              <button
+                onClick={signOut}
+                className="hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 hover:bg-white/10 md:inline-flex"
+                aria-label="Chiqish"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-sunset px-4 py-2 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition-transform hover:scale-105"
+            >
+              <LogIn className="h-4 w-4" /> Kirish
+            </Link>
+          )}
+
           <button
             onClick={() => setOpen(!open)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/90 lg:hidden"
@@ -112,6 +163,29 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
+            <div className="my-1 h-px bg-white/10" />
+            {user ? (
+              <>
+                <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10">
+                  Panel
+                </Link>
+                <Link to="/profile" onClick={() => setOpen(false)} className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10">
+                  Profil ({ROLE_LABEL[role]})
+                </Link>
+                {isStaff && (
+                  <Link to="/admin" onClick={() => setOpen(false)} className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10">
+                    Admin panel
+                  </Link>
+                )}
+                <button onClick={signOut} className="rounded-2xl px-4 py-2.5 text-left text-sm font-semibold text-white/85 hover:bg-white/10">
+                  Chiqish
+                </button>
+              </>
+            ) : (
+              <Link to="/auth" onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10">
+                <User className="h-4 w-4" /> Kirish / Ro'yxatdan o'tish
+              </Link>
+            )}
           </div>
         </motion.div>
       )}

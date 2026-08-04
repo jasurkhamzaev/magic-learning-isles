@@ -11,15 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as RewardsRouteImport } from './routes/rewards'
-import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as IslandsRouteImport } from './routes/islands'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiTeacherRouteImport } from './routes/ai-teacher'
-import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IslandsSlugRouteImport } from './routes/islands.$slug'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const SubjectsRoute = SubjectsRouteImport.update({
   id: '/subjects',
@@ -29,11 +32,6 @@ const SubjectsRoute = SubjectsRouteImport.update({
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -56,14 +54,18 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AiTeacherRoute = AiTeacherRouteImport.update({
   id: '/ai-teacher',
   path: '/ai-teacher',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -76,98 +78,127 @@ const IslandsSlugRoute = IslandsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => IslandsRoute,
 } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/ai-teacher': typeof AiTeacherRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
-  '/profile': typeof ProfileRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/ai-teacher': typeof AiTeacherRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
-  '/profile': typeof ProfileRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/ai-teacher': typeof AiTeacherRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
-  '/profile': typeof ProfileRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
     | '/ai-teacher'
+    | '/auth'
     | '/blog'
     | '/islands'
     | '/leaderboard'
     | '/map'
-    | '/profile'
     | '/rewards'
     | '/subjects'
+    | '/admin'
+    | '/dashboard'
+    | '/profile'
     | '/islands/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/ai-teacher'
+    | '/auth'
     | '/blog'
     | '/islands'
     | '/leaderboard'
     | '/map'
-    | '/profile'
     | '/rewards'
     | '/subjects'
+    | '/admin'
+    | '/dashboard'
+    | '/profile'
     | '/islands/$slug'
   id:
     | '__root__'
     | '/'
-    | '/admin'
+    | '/_authenticated'
     | '/ai-teacher'
+    | '/auth'
     | '/blog'
     | '/islands'
     | '/leaderboard'
     | '/map'
-    | '/profile'
     | '/rewards'
     | '/subjects'
+    | '/_authenticated/admin'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/profile'
     | '/islands/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AiTeacherRoute: typeof AiTeacherRoute
+  AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRoute
   IslandsRoute: typeof IslandsRouteWithChildren
   LeaderboardRoute: typeof LeaderboardRoute
   MapRoute: typeof MapRoute
-  ProfileRoute: typeof ProfileRoute
   RewardsRoute: typeof RewardsRoute
   SubjectsRoute: typeof SubjectsRoute
 }
@@ -186,13 +217,6 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof RewardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -223,6 +247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ai-teacher': {
       id: '/ai-teacher'
       path: '/ai-teacher'
@@ -230,11 +261,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiTeacherRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -251,8 +282,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IslandsSlugRouteImport
       parentRoute: typeof IslandsRoute
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface IslandsRouteChildren {
   IslandsSlugRoute: typeof IslandsSlugRoute
@@ -267,26 +334,16 @@ const IslandsRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AiTeacherRoute: AiTeacherRoute,
+  AuthRoute: AuthRoute,
   BlogRoute: BlogRoute,
   IslandsRoute: IslandsRouteWithChildren,
   LeaderboardRoute: LeaderboardRoute,
   MapRoute: MapRoute,
-  ProfileRoute: ProfileRoute,
   RewardsRoute: RewardsRoute,
   SubjectsRoute: SubjectsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
