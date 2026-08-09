@@ -9,8 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as NoAccessRouteImport } from './routes/no-access'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as IslandsRouteImport } from './routes/islands'
@@ -19,19 +20,27 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiTeacherRouteImport } from './routes/ai-teacher'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SubjectsIndexRouteImport } from './routes/subjects.index'
+import { Route as SubjectsSlugRouteImport } from './routes/subjects.$slug'
+import { Route as LessonsSlugRouteImport } from './routes/lessons.$slug'
 import { Route as IslandsSlugRouteImport } from './routes/islands.$slug'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
-const SubjectsRoute = SubjectsRouteImport.update({
-  id: '/subjects',
-  path: '/subjects',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoAccessRoute = NoAccessRouteImport.update({
+  id: '/no-access',
+  path: '/no-access',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -73,6 +82,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubjectsIndexRoute = SubjectsIndexRouteImport.update({
+  id: '/subjects/',
+  path: '/subjects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubjectsSlugRoute = SubjectsSlugRouteImport.update({
+  id: '/subjects/$slug',
+  path: '/subjects/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LessonsSlugRoute = LessonsSlugRouteImport.update({
+  id: '/lessons/$slug',
+  path: '/lessons/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IslandsSlugRoute = IslandsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -102,12 +126,16 @@ export interface FileRoutesByFullPath {
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
+  '/no-access': typeof NoAccessRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
-  '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
+  '/lessons/$slug': typeof LessonsSlugRoute
+  '/subjects/$slug': typeof SubjectsSlugRoute
+  '/subjects/': typeof SubjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,12 +145,16 @@ export interface FileRoutesByTo {
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
+  '/no-access': typeof NoAccessRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
-  '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
+  '/lessons/$slug': typeof LessonsSlugRoute
+  '/subjects/$slug': typeof SubjectsSlugRoute
+  '/subjects': typeof SubjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,12 +166,16 @@ export interface FileRoutesById {
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
+  '/no-access': typeof NoAccessRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
-  '/subjects': typeof SubjectsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
+  '/lessons/$slug': typeof LessonsSlugRoute
+  '/subjects/$slug': typeof SubjectsSlugRoute
+  '/subjects/': typeof SubjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,12 +187,16 @@ export interface FileRouteTypes {
     | '/islands'
     | '/leaderboard'
     | '/map'
+    | '/no-access'
+    | '/reset-password'
     | '/rewards'
-    | '/subjects'
     | '/admin'
     | '/dashboard'
     | '/profile'
     | '/islands/$slug'
+    | '/lessons/$slug'
+    | '/subjects/$slug'
+    | '/subjects/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,12 +206,16 @@ export interface FileRouteTypes {
     | '/islands'
     | '/leaderboard'
     | '/map'
+    | '/no-access'
+    | '/reset-password'
     | '/rewards'
-    | '/subjects'
     | '/admin'
     | '/dashboard'
     | '/profile'
     | '/islands/$slug'
+    | '/lessons/$slug'
+    | '/subjects/$slug'
+    | '/subjects'
   id:
     | '__root__'
     | '/'
@@ -182,12 +226,16 @@ export interface FileRouteTypes {
     | '/islands'
     | '/leaderboard'
     | '/map'
+    | '/no-access'
+    | '/reset-password'
     | '/rewards'
-    | '/subjects'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/islands/$slug'
+    | '/lessons/$slug'
+    | '/subjects/$slug'
+    | '/subjects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -199,24 +247,35 @@ export interface RootRouteChildren {
   IslandsRoute: typeof IslandsRouteWithChildren
   LeaderboardRoute: typeof LeaderboardRoute
   MapRoute: typeof MapRoute
+  NoAccessRoute: typeof NoAccessRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
-  SubjectsRoute: typeof SubjectsRoute
+  LessonsSlugRoute: typeof LessonsSlugRoute
+  SubjectsSlugRoute: typeof SubjectsSlugRoute
+  SubjectsIndexRoute: typeof SubjectsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/subjects': {
-      id: '/subjects'
-      path: '/subjects'
-      fullPath: '/subjects'
-      preLoaderRoute: typeof SubjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/rewards': {
       id: '/rewards'
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no-access': {
+      id: '/no-access'
+      path: '/no-access'
+      fullPath: '/no-access'
+      preLoaderRoute: typeof NoAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -273,6 +332,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subjects/': {
+      id: '/subjects/'
+      path: '/subjects'
+      fullPath: '/subjects/'
+      preLoaderRoute: typeof SubjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subjects/$slug': {
+      id: '/subjects/$slug'
+      path: '/subjects/$slug'
+      fullPath: '/subjects/$slug'
+      preLoaderRoute: typeof SubjectsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lessons/$slug': {
+      id: '/lessons/$slug'
+      path: '/lessons/$slug'
+      fullPath: '/lessons/$slug'
+      preLoaderRoute: typeof LessonsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/islands/$slug': {
@@ -341,8 +421,12 @@ const rootRouteChildren: RootRouteChildren = {
   IslandsRoute: IslandsRouteWithChildren,
   LeaderboardRoute: LeaderboardRoute,
   MapRoute: MapRoute,
+  NoAccessRoute: NoAccessRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
-  SubjectsRoute: SubjectsRoute,
+  LessonsSlugRoute: LessonsSlugRoute,
+  SubjectsSlugRoute: SubjectsSlugRoute,
+  SubjectsIndexRoute: SubjectsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

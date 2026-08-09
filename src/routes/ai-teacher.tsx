@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { Mic, Send, Sparkles, Brain, Calculator, Languages, BookOpen, HelpCircle, ClipboardList, Beaker } from "lucide-react";
 import { PageShell, GlassCard } from "@/components/PageShell";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export const Route = createFileRoute("/ai-teacher")({
   head: () => ({
@@ -11,7 +12,11 @@ export const Route = createFileRoute("/ai-teacher")({
       { name: "description", content: "Sun'iy intellekt yordamida istalgan fan bo'yicha savol bering." },
     ],
   }),
-  component: AIPage,
+  component: () => (
+    <RoleGuard allow={["student", "teacher", "parent", "manager", "superadmin"]}>
+      <AIPage />
+    </RoleGuard>
+  ),
 });
 
 const features = [

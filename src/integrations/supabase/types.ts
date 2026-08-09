@@ -14,6 +14,171 @@ export type Database = {
   }
   public: {
     Tables: {
+      demo_students: {
+        Row: {
+          avatar_emoji: string
+          created_at: string
+          full_name: string
+          grade: number | null
+          id: string
+          island: string
+          level: number
+          stars: number
+          streak: number
+          xp: number
+        }
+        Insert: {
+          avatar_emoji?: string
+          created_at?: string
+          full_name: string
+          grade?: number | null
+          id?: string
+          island?: string
+          level?: number
+          stars?: number
+          streak?: number
+          xp?: number
+        }
+        Update: {
+          avatar_emoji?: string
+          created_at?: string
+          full_name?: string
+          grade?: number | null
+          id?: string
+          island?: string
+          level?: number
+          stars?: number
+          streak?: number
+          xp?: number
+        }
+        Relationships: []
+      }
+      lesson_progress: {
+        Row: {
+          completed_at: string
+          created_at: string
+          id: string
+          lesson_id: string
+          score: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          lesson_id: string
+          score?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          score?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_questions: {
+        Row: {
+          correct_index: number
+          created_at: string
+          id: string
+          lesson_id: string
+          options: Json
+          order_index: number
+          question: string
+        }
+        Insert: {
+          correct_index?: number
+          created_at?: string
+          id?: string
+          lesson_id: string
+          options: Json
+          order_index?: number
+          question: string
+        }
+        Update: {
+          correct_index?: number
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          options?: Json
+          order_index?: number
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_questions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          content: string
+          created_at: string
+          duration_min: number
+          id: string
+          order_index: number
+          slug: string
+          subject_id: string
+          summary: string
+          title: string
+          updated_at: string
+          xp_reward: number
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          duration_min?: number
+          id?: string
+          order_index?: number
+          slug: string
+          subject_id: string
+          summary?: string
+          title: string
+          updated_at?: string
+          xp_reward?: number
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          duration_min?: number
+          id?: string
+          order_index?: number
+          slug?: string
+          subject_id?: string
+          summary?: string
+          title?: string
+          updated_at?: string
+          xp_reward?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_emoji: string
@@ -65,6 +230,45 @@ export type Database = {
           streak?: number
           updated_at?: string
           xp?: number
+        }
+        Relationships: []
+      }
+      subjects: {
+        Row: {
+          created_at: string
+          difficulty: string
+          gradient: string
+          icon: string
+          id: string
+          island: string
+          name: string
+          order_index: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          difficulty?: string
+          gradient?: string
+          icon?: string
+          id?: string
+          island?: string
+          name: string
+          order_index?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          difficulty?: string
+          gradient?: string
+          icon?: string
+          id?: string
+          island?: string
+          name?: string
+          order_index?: number
+          slug?: string
+          updated_at?: string
         }
         Relationships: []
       }
