@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as NoAccessRouteImport } from './routes/no-access'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as IslandsRouteImport } from './routes/islands'
@@ -32,6 +33,11 @@ const SubjectsRoute = SubjectsRouteImport.update({
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoAccessRoute = NoAccessRouteImport.update({
+  id: '/no-access',
+  path: '/no-access',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
+  '/no-access': typeof NoAccessRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
+  '/no-access': typeof NoAccessRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/islands': typeof IslandsRouteWithChildren
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
+  '/no-access': typeof NoAccessRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/islands'
     | '/leaderboard'
     | '/map'
+    | '/no-access'
     | '/rewards'
     | '/subjects'
     | '/admin'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/islands'
     | '/leaderboard'
     | '/map'
+    | '/no-access'
     | '/rewards'
     | '/subjects'
     | '/admin'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/islands'
     | '/leaderboard'
     | '/map'
+    | '/no-access'
     | '/rewards'
     | '/subjects'
     | '/_authenticated/admin'
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   IslandsRoute: typeof IslandsRouteWithChildren
   LeaderboardRoute: typeof LeaderboardRoute
   MapRoute: typeof MapRoute
+  NoAccessRoute: typeof NoAccessRoute
   RewardsRoute: typeof RewardsRoute
   SubjectsRoute: typeof SubjectsRoute
 }
@@ -217,6 +230,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no-access': {
+      id: '/no-access'
+      path: '/no-access'
+      fullPath: '/no-access'
+      preLoaderRoute: typeof NoAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -341,19 +361,10 @@ const rootRouteChildren: RootRouteChildren = {
   IslandsRoute: IslandsRouteWithChildren,
   LeaderboardRoute: LeaderboardRoute,
   MapRoute: MapRoute,
+  NoAccessRoute: NoAccessRoute,
   RewardsRoute: RewardsRoute,
   SubjectsRoute: SubjectsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
