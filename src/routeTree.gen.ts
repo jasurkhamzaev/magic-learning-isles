@@ -22,6 +22,7 @@ import { Route as AiTeacherRouteImport } from './routes/ai-teacher'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubjectsSlugRouteImport } from './routes/subjects.$slug'
+import { Route as LessonsSlugRouteImport } from './routes/lessons.$slug'
 import { Route as IslandsSlugRouteImport } from './routes/islands.$slug'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -91,6 +92,11 @@ const SubjectsSlugRoute = SubjectsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => SubjectsRoute,
 } as any)
+const LessonsSlugRoute = LessonsSlugRouteImport.update({
+  id: '/lessons/$slug',
+  path: '/lessons/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IslandsSlugRoute = IslandsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
+  '/lessons/$slug': typeof LessonsSlugRoute
   '/subjects/$slug': typeof SubjectsSlugRoute
 }
 export interface FileRoutesByTo {
@@ -146,6 +153,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
+  '/lessons/$slug': typeof LessonsSlugRoute
   '/subjects/$slug': typeof SubjectsSlugRoute
 }
 export interface FileRoutesById {
@@ -166,6 +174,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/islands/$slug': typeof IslandsSlugRoute
+  '/lessons/$slug': typeof LessonsSlugRoute
   '/subjects/$slug': typeof SubjectsSlugRoute
 }
 export interface FileRouteTypes {
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/islands/$slug'
+    | '/lessons/$slug'
     | '/subjects/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/islands/$slug'
+    | '/lessons/$slug'
     | '/subjects/$slug'
   id:
     | '__root__'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/islands/$slug'
+    | '/lessons/$slug'
     | '/subjects/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   SubjectsRoute: typeof SubjectsRouteWithChildren
+  LessonsSlugRoute: typeof LessonsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -334,6 +347,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubjectsSlugRouteImport
       parentRoute: typeof SubjectsRoute
     }
+    '/lessons/$slug': {
+      id: '/lessons/$slug'
+      path: '/lessons/$slug'
+      fullPath: '/lessons/$slug'
+      preLoaderRoute: typeof LessonsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/islands/$slug': {
       id: '/islands/$slug'
       path: '/$slug'
@@ -416,6 +436,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   SubjectsRoute: SubjectsRouteWithChildren,
+  LessonsSlugRoute: LessonsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
