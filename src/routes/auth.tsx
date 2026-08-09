@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { motion } from "motion/react";
 import { Loader2, Mail, Lock, User as UserIcon, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { checkEmailStatus } from "@/lib/auth.functions";
 import { MagicalBackground } from "@/components/MagicalBackground";
 import { GlassCard } from "@/components/PageShell";
 import { ROLE_DESC, ROLE_EMOJI, ROLE_LABEL, SIGNUP_ROLES, type AppRole } from "@/lib/roles";
@@ -16,14 +18,19 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Hashimjon Akademiyasiga kiring: o'quvchi, ustoz yoki ota-ona sifatida ro'yxatdan o'ting." },
       { property: "og:title", content: "Kirish — Hashimjon Akademiyasi" },
       { property: "og:description", content: "O'quvchi, ustoz yoki ota-ona sifatida sehrli bilim orollariga qo'shiling." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,
 });
 
+type Mode = "login" | "signup" | "forgot";
+
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const emailStatus = useServerFn(checkEmailStatus);
+  const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -34,27 +41,58 @@ function AuthPage() {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        toast.success("Xush kelibsiz! 🎉");
-        void navigate({ to: "/dashboard" });
-      } else {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: window.location.origin,
-            data: { full_name: fullName, role, avatar_emoji: ROLE_EMOJI[role] },
-          },
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
         });
         if (error) throw error;
-        if (data.session) {
-          toast.success("Hisob yaratildi! 🚀");
-          void navigate({ to: "/dashboard" });
-        } else {
-          toast.success("Emailingizni tasdiqlang — xat yubordik ✉️");
+        toast.success("Parolni tiklash havolasi emailingizga yuborildi ✉️");
+        setMode("login");
+        return;
+      }
+
+      if (mode === "login") {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          // Google bilan yaratilgan hisob bo'lsa — aniq yo'l ko'rsatamiz (account linking).
+          const status = await emailStatus({ data: { email } }).catch(() => null);
+          if (status?.exists && status.providers.includes("google") && !status.providers.includes("email")) {
+            toast.error("Bu hisob Google bilan yaratilgan. «Google bilan davom etish» tugmasini bosing.");
+            return;
+          }
+          throw error;
         }
+        toast.success("Xush kelibsiz! 🎉");
+        void navigate({ to: "/dashboard" });
+        return;
+      }
+
+      // signup — bir email bilan takror ro'yxatdan o'tishni bloklaymiz
+      const status = await emailStatus({ data: { email } }).catch(() => null);
+      if (status?.exists) {
+        if (status.providers.includes("google") && !status.providers.includes("email")) {
+          toast.error("Bu email Google hisobiga bog'langan. «Google bilan davom etish» orqali kiring.");
+        } else {
+          toast.error("Bu email bilan hisob allaqachon mavjud. Iltimos, kiring yoki parolni tiklang.");
+          setMode("login");
+        }
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: window.location.origin,
+          data: { full_name: fullName, role, avatar_emoji: ROLE_EMOJI[role] },
+        },
+      });
+      if (error) throw error;
+      if (data.session) {
+        toast.success("Hisob yaratildi! 🚀");
+        void navigate({ to: "/dashboard" });
+      } else {
+        toast.success("Emailingizni tasdiqlang — xat yubordik ✉️");
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Xatolik yuz berdi");
@@ -99,10 +137,14 @@ function AuthPage() {
             ✨
           </span>
           <h1 className="mt-4 text-3xl font-extrabold text-white">
-            {mode === "login" ? "Xush kelibsiz!" : "Sayohatni boshlang"}
+            {mode === "login" ? "Xush kelibsiz!" : mode === "signup" ? "Sayohatni boshlang" : "Parolni tiklash"}
           </h1>
           <p className="mt-1 text-sm text-white/60">
-            {mode === "login" ? "Orollarga qaytish uchun kiring" : "Rolingizni tanlab hisob yarating"}
+            {mode === "login"
+              ? "Orollarga qaytish uchun kiring"
+              : mode === "signup"
+                ? "Rolingizni tanlab hisob yarating"
+                : "Emailingizni kiriting — tiklash havolasini yuboramiz"}
           </p>
         </div>
 
@@ -172,18 +214,20 @@ function AuthPage() {
               />
             </Field>
 
-            <Field icon={Lock}>
-              <input
-                required
-                minLength={6}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Parol (kamida 6 belgi)"
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
-                className="w-full bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
-              />
-            </Field>
+            {mode !== "forgot" && (
+              <Field icon={Lock}>
+                <input
+                  required
+                  minLength={6}
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Parol (kamida 6 belgi)"
+                  autoComplete={mode === "login" ? "current-password" : "new-password"}
+                  className="w-full bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
+                />
+              </Field>
+            )}
 
             <button
               type="submit"
@@ -191,9 +235,21 @@ function AuthPage() {
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-sunset py-3 text-sm font-extrabold text-white shadow-lg shadow-orange-500/30 transition-transform hover:scale-[1.02] disabled:opacity-60"
             >
               {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-              {mode === "login" ? "Kirish" : "Hisob yaratish"}
+              {mode === "login" ? "Kirish" : mode === "signup" ? "Hisob yaratish" : "Havola yuborish"}
             </button>
           </form>
+
+          <div className="mt-3 text-center">
+            {mode === "forgot" ? (
+              <button onClick={() => setMode("login")} className="text-xs font-semibold text-white/60 hover:text-white">
+                ← Kirishga qaytish
+              </button>
+            ) : (
+              <button onClick={() => setMode("forgot")} className="text-xs font-semibold text-magic-cyan hover:underline">
+                Parolni unutdingizmi?
+              </button>
+            )}
+          </div>
 
           <div className="my-5 flex items-center gap-3 text-xs text-white/40">
             <div className="h-px flex-1 bg-white/10" /> yoki <div className="h-px flex-1 bg-white/10" />
@@ -208,7 +264,7 @@ function AuthPage() {
           </button>
 
           <p className="mt-4 text-center text-xs text-white/40">
-            Superadmin va Manager rollari faqat mavjud adminlar tomonidan tayinlanadi.
+            Bir email bilan faqat bitta hisob. Google va parol usullari bir xil emailda avtomatik bog'lanadi.
           </p>
         </GlassCard>
       </motion.div>
