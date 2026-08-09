@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as NoAccessRouteImport } from './routes/no-access'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
@@ -33,6 +34,11 @@ const SubjectsRoute = SubjectsRouteImport.update({
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NoAccessRoute = NoAccessRouteImport.update({
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
   '/no-access': typeof NoAccessRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
   '/no-access': typeof NoAccessRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/leaderboard': typeof LeaderboardRoute
   '/map': typeof MapRoute
   '/no-access': typeof NoAccessRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/subjects': typeof SubjectsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/map'
     | '/no-access'
+    | '/reset-password'
     | '/rewards'
     | '/subjects'
     | '/admin'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/map'
     | '/no-access'
+    | '/reset-password'
     | '/rewards'
     | '/subjects'
     | '/admin'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/map'
     | '/no-access'
+    | '/reset-password'
     | '/rewards'
     | '/subjects'
     | '/_authenticated/admin'
@@ -212,6 +224,7 @@ export interface RootRouteChildren {
   LeaderboardRoute: typeof LeaderboardRoute
   MapRoute: typeof MapRoute
   NoAccessRoute: typeof NoAccessRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   SubjectsRoute: typeof SubjectsRoute
 }
@@ -230,6 +243,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/no-access': {
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   LeaderboardRoute: LeaderboardRoute,
   MapRoute: MapRoute,
   NoAccessRoute: NoAccessRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   SubjectsRoute: SubjectsRoute,
 }
