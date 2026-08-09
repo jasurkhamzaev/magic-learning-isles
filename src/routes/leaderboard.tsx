@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Flame, Trophy, TrendingUp } from "lucide-react";
 import { PageShell, GlassCard } from "@/components/PageShell";
+import { fetchDemoStudents } from "@/lib/content";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({
@@ -11,6 +14,8 @@ export const Route = createFileRoute("/leaderboard")({
       { name: "description", content: "Eng faol o'quvchilarni kuzating va TOP o'rinlar uchun kurashing." },
       { property: "og:title", content: "Reyting — Hashimjon Akademiyasi" },
       { property: "og:description", content: "Global va sinf reytingi." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: LeaderboardPage,
@@ -18,16 +23,16 @@ export const Route = createFileRoute("/leaderboard")({
 
 const scopes = ["Global", "Maktab", "Sinf", "Do'stlar"] as const;
 
-const players = [
-  { rank: 1, name: "Aziza Karimova", island: "Kelajak", xp: 24800, stars: 412, streak: 45, avatar: "👩‍🚀" },
-  { rank: 2, name: "Bekzod Mahmudov", island: "Kashfiyot", xp: 22150, stars: 388, streak: 30, avatar: "🧑‍🔬" },
-  { rank: 3, name: "Dilnoza Rahimova", island: "Kelajak", xp: 20340, stars: 356, streak: 28, avatar: "👩‍💻" },
-  { rank: 4, name: "Sardor Toshev", island: "Kashfiyot", xp: 18720, stars: 320, streak: 22, avatar: "🧑‍🎓" },
-  { rank: 5, name: "Malika Saidova", island: "Quvonch", xp: 17280, stars: 298, streak: 19, avatar: "👧" },
-  { rank: 6, name: "Oybek Yusupov", island: "Kelajak", xp: 16120, stars: 274, streak: 15, avatar: "🧑" },
-  { rank: 7, name: "Kamila Ergasheva", island: "Kashfiyot", xp: 15040, stars: 261, streak: 14, avatar: "👩" },
-  { rank: 8, name: "Jasur Nurmatov", island: "Kelajak", xp: 14200, stars: 248, streak: 12, avatar: "🧑‍🎓" },
-];
+type Player = {
+  rank: number;
+  name: string;
+  island: string;
+  xp: number;
+  stars: number;
+  streak: number;
+  avatar: string;
+  me?: boolean;
+};
 
 function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [n, setN] = useState(0);
@@ -48,8 +53,37 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
 
 function LeaderboardPage() {
   const [scope, setScope] = useState<(typeof scopes)[number]>("Global");
+  const { profile } = useAuth();
+  const { data: demo = [] } = useQuery({ queryKey: ["demo-students"], queryFn: fetchDemoStudents });
+
+  const players = useMemo<Player[]>(() => {
+    const rows = demo.map((d) => ({
+      name: d.full_name,
+      island: d.island.charAt(0).toUpperCase() + d.island.slice(1),
+      xp: d.xp,
+      stars: d.stars,
+      streak: d.streak,
+      avatar: d.avatar_emoji,
+      me: false,
+    }));
+    if (profile) {
+      rows.push({
+        name: `${profile.full_name || "Siz"} (siz)`,
+        island: profile.island.charAt(0).toUpperCase() + profile.island.slice(1),
+        xp: profile.xp,
+        stars: profile.stars,
+        streak: profile.streak,
+        avatar: profile.avatar_emoji,
+        me: true,
+      });
+    }
+    return rows
+      .sort((a, b) => b.xp - a.xp)
+      .map((r, i) => ({ ...r, rank: i + 1 }));
+  }, [demo, profile]);
+
   const top3 = players.slice(0, 3);
-  const podiumOrder = [top3[1], top3[0], top3[2]]; // silver, gold, bronze
+  const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean) as Player[]; // silver, gold, bronze
   const podiumHeights = ["h-32", "h-44", "h-24"];
   const medals = ["🥈", "🥇", "🥉"];
 
