@@ -88,9 +88,9 @@ const SubjectsIndexRoute = SubjectsIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubjectsSlugRoute = SubjectsSlugRouteImport.update({
-  id: '/subjects/$slug',
-  path: '/subjects/$slug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => SubjectsRoute,
 } as any)
 const LessonsSlugRoute = LessonsSlugRouteImport.update({
   id: '/lessons/$slug',
@@ -251,7 +251,6 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   LessonsSlugRoute: typeof LessonsSlugRoute
-  SubjectsSlugRoute: typeof SubjectsSlugRoute
   SubjectsIndexRoute: typeof SubjectsIndexRoute
 }
 
@@ -343,10 +342,10 @@ declare module '@tanstack/react-router' {
     }
     '/subjects/$slug': {
       id: '/subjects/$slug'
-      path: '/subjects/$slug'
+      path: '/$slug'
       fullPath: '/subjects/$slug'
       preLoaderRoute: typeof SubjectsSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof SubjectsRoute
     }
     '/lessons/$slug': {
       id: '/lessons/$slug'
@@ -425,9 +424,18 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   LessonsSlugRoute: LessonsSlugRoute,
-  SubjectsSlugRoute: SubjectsSlugRoute,
   SubjectsIndexRoute: SubjectsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
