@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { PageShell, GlassCard } from "@/components/PageShell";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export const Route = createFileRoute("/rewards")({
   head: () => ({
@@ -12,7 +13,11 @@ export const Route = createFileRoute("/rewards")({
       { property: "og:description", content: "Kunlik, haftalik va oylik mukofotlar." },
     ],
   }),
-  component: RewardsPage,
+  component: () => (
+    <RoleGuard>
+      <RewardsPage />
+    </RoleGuard>
+  ),
 });
 
 type Reward = { icon: string; name: string; desc: string; gradient: string; progress: number };
