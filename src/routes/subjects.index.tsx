@@ -7,7 +7,7 @@ import { PageShell, GlassCard } from "@/components/PageShell";
 import { fetchSubjects, fetchMyProgress, type Subject } from "@/lib/content";
 import { useAuth } from "@/hooks/useAuth";
 
-export const Route = createFileRoute("/subjects")({
+export const Route = createFileRoute("/subjects/")({
   head: () => ({
     meta: [
       { title: "Fanlar — Hashimjon Akademiyasi" },
