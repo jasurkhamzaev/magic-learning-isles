@@ -1,4 +1,10 @@
-import { DEMO_PASSWORD, demoEmailFromName, type DemoAccount } from "@/lib/demo-accounts";
+import {
+  DEMO_PASSWORD,
+  MAGIC_LINK_TTL_SEC,
+  demoEmailFromName,
+  type DemoAccount,
+} from "@/lib/demo-accounts";
+
 
 type MinimalSupabase = {
   from: (t: string) => {
@@ -128,5 +134,28 @@ export async function magicLinkFor(email: string, redirectTo: string) {
     options: { redirectTo },
   });
   if (error) throw new Error(error.message);
-  return { link: data.properties?.action_link ?? null };
+  const issuedAt = Date.now();
+  return {
+    link: data.properties?.action_link ?? null,
+    issuedAt,
+    expiresAt: issuedAt + MAGIC_LINK_TTL_SEC * 1000,
+    ttlSeconds: MAGIC_LINK_TTL_SEC,
+    oneTime: true,
+  };
 }
+
+/**
+ * Havolani bekor qiladi: shu email uchun yangi token generatsiya qilinadi va
+ * darhol tashlab yuboriladi — natijada oldingi magic link ishlamaydi.
+ */
+export async function revokeMagicLinkFor(email: string, redirectTo: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.auth.admin.generateLink({
+    type: "magiclink",
+    email,
+    options: { redirectTo },
+  });
+  if (error) throw new Error(error.message);
+  return { revoked: true, revokedAt: Date.now() };
+}
+

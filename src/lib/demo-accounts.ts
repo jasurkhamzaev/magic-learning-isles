@@ -5,6 +5,12 @@ export const DEMO_EMAIL_DOMAIN = "demo.hashimjon.uz";
 /** Barcha demo o'quvchilar uchun bir xil vaqtinchalik parol (faqat demo maqsadida). */
 export const DEMO_PASSWORD = "Demo2026!";
 
+/** Magic link amal qilish muddati (Auth OTP expiry bilan mos): 60 daqiqa. */
+export const MAGIC_LINK_TTL_SEC = 3600;
+
+export type MagicLinkStatus = "active" | "expired" | "revoked";
+
+
 /** "Ali Karimov" -> "ali.karimov@demo.hashimjon.uz" */
 export function demoEmailFromName(fullName: string) {
   const slug = fullName
