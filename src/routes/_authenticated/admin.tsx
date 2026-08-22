@@ -19,6 +19,7 @@ import {
 import { MagicalBackground } from "@/components/MagicalBackground";
 import { GlassCard } from "@/components/PageShell";
 import { useAuth } from "@/hooks/useAuth";
+import { DemoAccountsPanel } from "@/components/DemoAccountsPanel";
 import { listAllUsers, setUserRole } from "@/lib/admin.functions";
 import { ALL_ROLES, ROLE_EMOJI, ROLE_LABEL, primaryRole, type AppRole } from "@/lib/roles";
 
@@ -229,6 +230,8 @@ function AdminDashboard({ canGrantSuperadmin }: { canGrantSuperadmin: boolean })
                 </div>
               </GlassCard>
             </div>
+
+            <DemoAccountsPanel />
 
             <div className="mt-6">
               <h3 className="mb-4 text-lg font-extrabold text-white">Foydalanuvchilar va rollar</h3>
