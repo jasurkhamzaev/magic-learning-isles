@@ -1,5 +1,11 @@
 import { useMemo } from "react";
 
+/** Deterministik "tasodifiy" qiymat — SSR va klientda bir xil bo'ladi. */
+function seeded(i: number, salt: number) {
+  const x = Math.sin(i * 12.9898 + salt * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 /**
  * Magical night-sky backdrop: aurora gradients, twinkling stars,
  * drifting clouds and floating particles. Pure CSS — runs at 60fps.
@@ -9,11 +15,11 @@ export function MagicalBackground() {
     () =>
       Array.from({ length: 90 }, (_, i) => ({
         id: i,
-        top: Math.random() * 100,
-        left: Math.random() * 100,
-        size: Math.random() * 2.5 + 1,
-        delay: Math.random() * 4,
-        duration: 2 + Math.random() * 3,
+        top: seeded(i, 1) * 100,
+        left: seeded(i, 2) * 100,
+        size: seeded(i, 3) * 2.5 + 1,
+        delay: seeded(i, 4) * 4,
+        duration: 2 + seeded(i, 5) * 3,
       })),
     [],
   );
@@ -22,13 +28,14 @@ export function MagicalBackground() {
     () =>
       Array.from({ length: 25 }, (_, i) => ({
         id: i,
-        top: Math.random() * 100,
-        left: Math.random() * 100,
-        size: Math.random() * 4 + 2,
-        delay: Math.random() * 6,
+        top: seeded(i, 6) * 100,
+        left: seeded(i, 7) * 100,
+        size: seeded(i, 8) * 4 + 2,
+        delay: seeded(i, 9) * 6,
       })),
     [],
   );
+
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
