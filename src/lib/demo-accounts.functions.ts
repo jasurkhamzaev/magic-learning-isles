@@ -39,3 +39,25 @@ export const createDemoMagicLink = createServerFn({ method: "POST" })
     }
     return magicLinkFor(email, data.redirectTo);
   });
+
+export const revokeDemoMagicLink = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { email: string; redirectTo: string }) =>
+    z
+      .object({
+        email: z.string().email().max(200),
+        redirectTo: z.string().url().max(500),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { assertStaffServer, revokeMagicLinkFor } = await import("@/lib/demo-accounts.server");
+    await assertStaffServer(context.supabase, context.userId);
+
+    const email = data.email.trim().toLowerCase();
+    if (!email.endsWith(`@${DEMO_EMAIL_DOMAIN}`)) {
+      throw new Error("Faqat demo hisoblar uchun amal bajariladi");
+    }
+    return revokeMagicLinkFor(email, data.redirectTo);
+  });
+
